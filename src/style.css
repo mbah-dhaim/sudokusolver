@@ -1,0 +1,53 @@
+.toolbar {
+    margin: 8px;
+    padding: 8px;
+}
+
+.toolbar button {
+    margin-left: 8px;
+}
+
+.board {
+    border: 1px solid black;
+    display: table;
+}
+
+.board-row {
+    display: table-row;
+}
+
+.board-cell {
+    display: table-cell;
+    width: 72px;
+    height: 72px;
+    border: 1px solid gray;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bolder;
+    vertical-align: middle;
+    line-height: 72px;
+}
+
+.board .selected {
+    background-color: aqua;
+}
+
+.board .suggested {
+    background-color: navy;
+    color: white;
+}
+
+.board .block-hor {
+    border-left: 4px solid black;
+}
+
+.board .block-ver {
+    border-top: 4px solid black;
+}
+.board .block-right {
+    border-right: 4px solid black;
+}
+
+.board .block-bottom {
+    border-top: 4px solid black;
+}
