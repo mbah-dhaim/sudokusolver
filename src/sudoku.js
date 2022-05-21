@@ -67,7 +67,7 @@ class SudokuCell {
         return this;
     }
     removeSuggestion(avalue) {
-        if (!this.suggestions) {
+        if (this.suggestions.length == 0) {
             return this;
         }
         let index = this.suggestions.indexOf(avalue);
@@ -75,6 +75,7 @@ class SudokuCell {
         this.suggestions.splice(index, 1);
         if (this.suggestions.length == 1) {
             this.value = this.suggestions[0];
+            this.view.empty();
             this.updateSuggestions().updateView();
         }
         return this;
@@ -90,6 +91,42 @@ class SudokuCell {
             return this;
         }
         this.view.html('');
+        return this;
+    }
+    showSuggestions() {
+        this.view.empty();
+        if (this.suggestions.length == 0) {
+            this.view.html(this.value);
+            return this;
+        }
+        // if (this.suggestions.length == 1) {
+        //     this.view.empty();
+        //     this.value = this.suggestions[0];
+        //     this.view.html(this.value);
+        //     this.suggestions = [];
+        //     return this;
+        // }
+        // create cell-container
+        let container = $('<div>');
+        container.addClass('board-cell-container');
+        // create cell-row-container
+        let row = $('<div>');
+        row.addClass('board-cell-row');
+        for (let i = 1; i < 10; i++) {
+            if (i % 3 == 1) {
+                row = $('<div>');
+                row.addClass('board-cell-row');
+                container.append(row);
+            }
+            let cell = $('<div>');
+            cell.addClass('board-cell-cell');
+            cell.html('');
+            if (this.suggestions.indexOf(i) >= 0) {
+                cell.html(i);
+            }
+            row.append(cell);
+        }
+        this.view.append(container);
         return this;
     }
 }
@@ -125,9 +162,18 @@ export default {
             });
             bar.append(tombol);
         }
+
+        // button show candidates
+        let btnShowCandidates = $('<button>');
+        btnShowCandidates.html('Show Candidates');
+        btnShowCandidates.click(function (e) {
+            self.updateSuggestions().showSuggestions();
+        });
+        bar.append(btnShowCandidates);
+
         // button log
         let btnLog = $('<button>');
-        btnLog.html('Log');
+        btnLog.html('Eliminate Candidates');
         btnLog.click(function (e) {
             self.updateSuggestions().showItems();
         });
@@ -197,16 +243,16 @@ export default {
                     id: 'cell-' + i + '-' + j,
                 });
                 cell.addClass('board-cell');
-                if(i %3 ==0){
+                if (i % 3 == 0) {
                     cell.addClass('block-ver');
                 }
-                if(i == 8){
+                if (i == 8) {
                     cell.addClass('block-bottom');
                 }
-                if(j %3 ==0){
+                if (j % 3 == 0) {
                     cell.addClass('block-hor');
                 }
-                if(j == 8){
+                if (j == 8) {
                     cell.addClass('block-right');
                 }
                 let sCell = new SudokuCell(i, j);
@@ -258,6 +304,12 @@ export default {
     showItems: function () {
         this.items.forEach(element => {
             console.log(element.suggestions);
+        });
+        return this;
+    },
+    showSuggestions: function () {
+        this.items.forEach(element => {
+            element.showSuggestions();
         });
         return this;
     },
